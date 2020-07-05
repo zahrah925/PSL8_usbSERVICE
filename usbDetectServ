@@ -1,0 +1,44 @@
+#!/bin/bash
+
+if [ "`lsblk -o name | grep sdb1`" ]
+then
+        echo "USB detected"
+	echo -ne "\007"     #play sound
+	echo " "
+
+	if [[ -d ~/Desktop/mnt_usb ]]  #mount usb
+	then
+		echo "Already mounted usb."
+		echo " "
+		#ls ~/Desktop/mnt_usb
+	else
+		mkdir ~/Desktop/mnt_usb
+		cd ~/Desktop
+		sudo mount /dev/sdb1 mnt_usb
+		echo "mount usb successful"
+		echo " "
+		sleep 3
+		#ls mnt_usb
+	fi
+
+	cd ~/Desktop/mnt_usb   #create log message in usb(time+date).
+	for i in $(seq 0 0)
+	do
+		echo "[$(date +%D_%H:%M)]Message was created at this date and time." >> message.log
+		echo "message.log created. Check in your USB."
+		echo " "
+		ls ~/Desktop/mnt_usb
+	done
+
+	echo " "
+	echo "Unmounting usb"
+	sleep 3
+	cd $OLDPWD #for unmounting usb, go to old path or else it will say target busy.
+	cd ~/Desktop/
+	sudo umount /dev/sdb1
+	rmdir mnt_usb  #remove folder mnt_usb as it will be empty when unmounted.
+	echo -ne "\007"  #play sound when unmounting usb.
+else
+        echo "USB not detected"
+	echo "Please plugin your USB."
+fi

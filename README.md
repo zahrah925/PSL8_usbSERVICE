@@ -48,6 +48,7 @@ WantedBy=multi-user.target
   - `systemctl enable daemon`
   - `systemctl status daemon.service`
 
+
 - To stop and delete the service:
 
   - `systemctl stop daemon.service` 
